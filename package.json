@@ -1,6 +1,6 @@
 {
   "name": "react-rest-kit",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "description": "wrap fetch to restful style",
   "main": "dist/index.js",
   "scripts": {
@@ -34,10 +34,10 @@
     "babel-preset-stage-0": "^6.24.1",
     "eslint": "^3.19.0",
     "expect.js": "^0.3.1",
+    "isomorphic-fetch": "^2.2.1",
     "mocha": "^3.4.1"
   },
   "dependencies": {
-    "isomorphic-fetch": "^2.2.1",
     "querystring": "^0.2.0"
   }
 }
