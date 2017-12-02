@@ -1,4 +1,5 @@
 import 'babel-polyfill';
+import 'isomorphic-fetch';
 import expect from 'expect.js';
 
 import Rest, { Parser } from "../src/rest";

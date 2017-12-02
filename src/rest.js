@@ -2,8 +2,6 @@ import querystring from 'querystring';
 import { isBlank } from './util';
 import { JsonParser, TextParser } from './parser';
 
-const fetch = (typeof window !== 'undefined' ? window.fetch : (global.fetch ? global.fetch : require('node-fetch')));
-
 class Rest {
   constructor({
     contentType = 'application/json',

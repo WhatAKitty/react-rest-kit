@@ -23,8 +23,6 @@ function _asyncToGenerator(fn) { return function () { var gen = fn.apply(this, a
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-var fetch = typeof window !== 'undefined' ? window.fetch : global.fetch ? global.fetch : require('node-fetch');
-
 var Rest = function () {
   function Rest(_ref) {
     var _this = this;

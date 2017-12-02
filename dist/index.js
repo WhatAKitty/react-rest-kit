@@ -9,6 +9,8 @@ var _rest = require('./rest');
 
 var _rest2 = _interopRequireDefault(_rest);
 
+require('isomorphic-fetch');
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _rest2.default;
