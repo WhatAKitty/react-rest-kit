@@ -140,7 +140,7 @@ class Rest {
       .then(response => response.text())
       .then((options.dataTypeParser || this.dataTypeParser).parse)  // default is this.datatypeParser
       .then((data) => ({ data }))
-      .catch((error) => { err: error });
+      .catch((error) => ({ err: error }));
   }
 
   async rest(url, options = {}) {

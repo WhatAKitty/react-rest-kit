@@ -192,7 +192,7 @@ var Rest = function () {
       .then(function (data) {
         return { data: data };
       }).catch(function (error) {
-        err: error;
+        return { err: error };
       });
     }
   }, {
