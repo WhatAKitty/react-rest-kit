@@ -95,32 +95,32 @@ class Rest {
       if (!error.response) {
         return Promise.resolve({
           timestamp: new Date().getTime(),
-          message: 'unkown error',
+          message: error.message,
           status: -1,
         });
       }
       return error.response.text()
         .then((options.dataTypeParser || this.dataTypeParser).parse)
-        .catch(err => {
-          return Promise.resolve({
-            timestamp: new Date().getTime(),
-            message: 'unkown error',
-            status: error.response.status,
-          });
-        })
         .then(err => {
           return {
             ...err,
             message: err[this.errorMsgKey] || 'unkown error',
             timestamp: new Date().getTime(),
-            status: err.status,
+            status: error.response.status,
           };
+        })
+        .catch(err => {
+          return Promise.resolve({
+            timestamp: new Date().getTime(),
+            message: error.message,
+            status: error.response.status,
+          });
         });
     } catch (err) {
       return Promise.resolve({
         timestamp: new Date().getTime(),
-        message: 'unkown error',
-        status: error.response && error.response.status,
+        message: error.message,
+        status: error.response && error.response.status || -1,
       });
     }
   }
