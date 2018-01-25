@@ -9,6 +9,7 @@ class Rest {
     dataTypeParser,
     errorMsgKey = 'message',
     authorizationObain = async () => {},
+    exceptionHandler = () => {},
   }) {
     // contentType should be 'application/json', 'multipart/form-data'
     // , 'application/x-www-form-urlencoded', 'text/plain', default is 'application/json'
@@ -24,6 +25,8 @@ class Rest {
     this.errorMsgKey = errorMsgKey;
 
     this.authorizationObain = authorizationObain;
+
+    this.exceptionHandler = exceptionHandler;
 
     this._contentType = this._contentType.bind(this);
     this._body = this._body.bind(this);
@@ -87,6 +90,14 @@ class Rest {
 
     const error = new Error(response.statusText);
     error.response = response;
+
+    // global exception handler
+    // if return false, it will not throw exception any more
+    const r = this.exceptionHandler({
+      status: response.status,
+      error,
+    });
+
     throw error;
   }
 
