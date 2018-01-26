@@ -2,7 +2,7 @@
   "name": "react-rest-kit",
   "version": "0.0.11",
   "description": "wrap fetch to restful style",
-  "main": "src/index.js",
+  "main": "dist/index.js",
   "scripts": {
     "build": "npm run lint && npm test && ./node_modules/.bin/babel src --out-dir dist",
     "test": "./node_modules/.bin/mocha --compilers js:babel-core/register --recursive",

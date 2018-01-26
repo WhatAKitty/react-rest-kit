@@ -45,7 +45,9 @@ var Rest = function () {
           }
         }
       }, _callee, _this);
-    })) : _ref$authorizationOba;
+    })) : _ref$authorizationOba,
+        _ref$exceptionHandler = _ref.exceptionHandler,
+        exceptionHandler = _ref$exceptionHandler === undefined ? function () {} : _ref$exceptionHandler;
 
     _classCallCheck(this, Rest);
 
@@ -63,6 +65,8 @@ var Rest = function () {
     this.errorMsgKey = errorMsgKey;
 
     this.authorizationObain = authorizationObain;
+
+    this.exceptionHandler = exceptionHandler;
 
     this._contentType = this._contentType.bind(this);
     this._body = this._body.bind(this);
@@ -136,6 +140,14 @@ var Rest = function () {
 
       var error = new Error(response.statusText);
       error.response = response;
+
+      // global exception handler
+      // if return false, it will not throw exception any more
+      var r = this.exceptionHandler({
+        status: response.status,
+        error: error
+      });
+
       throw error;
     }
   }, {
@@ -147,28 +159,28 @@ var Rest = function () {
         if (!error.response) {
           return Promise.resolve({
             timestamp: new Date().getTime(),
-            message: 'unkown error',
+            message: error.message,
             status: -1
           });
         }
-        return error.response.text().then((options.dataTypeParser || this.dataTypeParser).parse).catch(function (err) {
-          return Promise.resolve({
-            timestamp: new Date().getTime(),
-            message: 'unkown error',
-            status: error.response.status
-          });
-        }).then(function (err) {
+        return error.response.text().then((options.dataTypeParser || this.dataTypeParser).parse).then(function (err) {
           return _extends({}, err, {
             message: err[_this2.errorMsgKey] || 'unkown error',
             timestamp: new Date().getTime(),
-            status: err.status
+            status: error.response.status
+          });
+        }).catch(function (err) {
+          return Promise.resolve({
+            timestamp: new Date().getTime(),
+            message: error.message,
+            status: error.response.status
           });
         });
       } catch (err) {
         return Promise.resolve({
           timestamp: new Date().getTime(),
-          message: 'unkown error',
-          status: error.response && error.response.status
+          message: error.message,
+          status: error.response && error.response.status || -1
         });
       }
     }
