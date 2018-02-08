@@ -58,6 +58,10 @@ Rest = function () {
     this.UPLOAD = this.UPLOAD.bind(this);
   }_createClass(Rest, [{ key: '_fetch', value: function _fetch()
 
+
+
+
+
     {
       if (this.debug && this.mockFetch) return this.mockFetch;else
       if ('undefined' !== typeof window) return window.fetch;else
@@ -268,7 +272,7 @@ Rest = function () {
                     headers: {
                       'Content-Type': 'multipart/form-data' },
 
-                    body: formData }));case 4:return _context8.abrupt('return', _context8.sent);case 5:case 'end':return _context8.stop();}}}, _callee8, this);}));function UPLOAD(_x20, _x21) {return _ref10.apply(this, arguments);}return UPLOAD;}() }]);return Rest;}();
+                    body: formData }));case 4:return _context8.abrupt('return', _context8.sent);case 5:case 'end':return _context8.stop();}}}, _callee8, this);}));function UPLOAD(_x20, _x21) {return _ref10.apply(this, arguments);}return UPLOAD;}() }, { key: 'fetch', get: function get() {return this._fetch();} }]);return Rest;}();
 
 
 
