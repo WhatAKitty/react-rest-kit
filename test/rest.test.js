@@ -18,7 +18,7 @@ describe('test rest', () => {
       contentType: 'application/json',
       dataType: 'text',
     });
-    const res = await rest.GET('http://www.baidu.com', {a: '123'});
+    const res = await rest.GET('http://www.baidu.com', { a: '123' });
     expect(res.data).to.ok();
     expect(res.err).to.be.eql(undefined);
   });
@@ -27,7 +27,7 @@ describe('test rest', () => {
       contentType: 'application/json',
       dataTypeParser: Parser.TextParser,
     });
-    const res = await rest.POST('http://www.baidu.com', {a: '123'});
+    const res = await rest.POST('http://www.baidu.com', { a: '123' });
     expect(res.data).to.ok();
     expect(res.err).to.be.eql(undefined);
   });
@@ -36,7 +36,7 @@ describe('test rest', () => {
       contentType: 'application/json',
       dataTypeParser: Parser.TextParser,
     });
-    const res = await rest.PUT('http://www.baidu.com', {a: '123'});
+    const res = await rest.PUT('http://www.baidu.com', { a: '123' });
     expect(res.data).to.ok();
     expect(res.err).to.be.eql(undefined);
   });
@@ -48,20 +48,66 @@ describe('test rest', () => {
       });
     }).throwError();
   });
-  it('test qidian', async () => {
+
+  describe('test integrated with fetch mock', async () => {
     const rest = new Rest({
+      debug: true,
+      mockRequire: require('./_mocks_'),
+      mockOptions: {
+        delay: 200, // 200ms
+        fetch: global.fetch,
+        exclude: [
+          'http://(.*)',
+          'https://(.*)',
+        ],
+      },
       contentType: 'application/json',
       dataType: 'json',
+      exceptionHandler: ({ status, error }) => {
+        if (status === 401 || status === 403) {
+          const err = new Error('no permission');
+          err.response = error.response;
+          throw err;
+        }
+      },
     });
-    const { data, err } = await rest.GET('https://mage.if.qidian.com/Atom.axd/Api/Book/Get', {
-      BookId: 1003759751,
-      iosDeviceType: 0,
-      isOutBook: 0,
-      preview: 0,
-    }, {
-      headers: {
-        'qdheader': 'OGZmOTAyZTBjNWM2MzNhMjYzNzQ4MjI5ZWRkMzBiOWF8NC43LjB8NzUwfDEzMzR8QXBwU3RvcmV8MTAuMzB8NXxpT1MvaVBob25lL2lQaG9uZTgsMXwxOTl8QXBwU3RvcmV8M3wtOTk5fDE1MDczNDc4MzI0MjF8MHwxYWUxM2Q4Mi1jMTBkLTQ1MGItYTNlOC1jODJjZTE1YjliOGM=',
-      }
+
+    it('test /api/thing', async () => {
+      const { data, err } = await rest.GET('/api/thing');
+      expect(err).to.be.an('undefined');
+      expect(data).to.be.an('array');
+      expect(data).to.not.be.empty();
     });
-  })
+  });
+
+  describe('test rest exception handler', () => {
+
+    const rest = new Rest({
+      debug: true,
+      mockRequire: require('./_mocks_'),
+      mockOptions: {
+        delay: 200, // 200ms
+        fetch: global.fetch,
+        exclude: [
+          'http://(.*)',
+          'https://(.*)',
+        ],
+      },
+      contentType: 'application/json',
+      dataType: 'json',
+      exceptionHandler: ({ status, error }) => {
+        if (status === 401 || status === 403) {
+          throw new Error('no permission');
+        }
+      },
+    });
+
+    it('test 401 exception', async () => {
+      const { err } = await rest.GET('/api/403');;
+      expect(err).to.not.be.empty();
+      expect(err.message).to.be.equal('no permission');
+    });
+
+  });
+
 });

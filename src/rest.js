@@ -1,4 +1,5 @@
 import querystring from 'querystring';
+import FetchMock from 'react-fetch-mock';
 import { isBlank } from './util';
 import { JsonParser, TextParser } from './parser';
 
@@ -8,8 +9,12 @@ class Rest {
     dataType = 'application/json',
     dataTypeParser,
     errorMsgKey = 'message',
-    authorizationObain = async () => {},
-    exceptionHandler = () => {},
+    authorizationObain = async () => { },
+    exceptionHandler = () => { },
+    fetchOptions = {},  // global fetch options
+    debug = false,  // debug mode,
+    mockRequire = undefined,
+    mockOptions = {},   // fetch mock options
   }) {
     // contentType should be 'application/json', 'multipart/form-data'
     // , 'application/x-www-form-urlencoded', 'text/plain', default is 'application/json'
@@ -28,6 +33,14 @@ class Rest {
 
     this.exceptionHandler = exceptionHandler;
 
+    this.fetchOptions = fetchOptions;
+
+    this.debug = debug;
+    if (this.debug) {
+      this.mockFetch = new FetchMock(mockRequire, mockOptions).fetch;
+    }
+
+    this._fetch = this._fetch.bind(this);
     this._contentType = this._contentType.bind(this);
     this._body = this._body.bind(this);
     this._datatype = this._datatype.bind(this);
@@ -45,12 +58,18 @@ class Rest {
     this.UPLOAD = this.UPLOAD.bind(this);
   }
 
+  _fetch() {
+    if (this.debug && this.mockFetch) return this.mockFetch;
+    else if ('undefined' !== typeof window) return window.fetch;
+    else if ('undefined' !== typeof global) return global.fetch;
+  }
+
   _contentType() {
     return this.contentType;
   }
 
   _body(data, contentType = this._contentType()) {
-    switch(contentType) {
+    switch (contentType) {
       case 'multipart/form-data':
         const fd = new FormData();
         Object.keys(data).forEach(key => {
@@ -73,7 +92,7 @@ class Rest {
   }
 
   _dataTypeParser(dataType = this._datatype()) {
-    switch(dataType) {
+    switch (dataType) {
       case 'json':
         return new JsonParser();
       case 'text':
@@ -92,8 +111,7 @@ class Rest {
     error.response = response;
 
     // global exception handler
-    // if return false, it will not throw exception any more
-    const r = this.exceptionHandler({
+    this.exceptionHandler({
       status: response.status,
       error,
     });
@@ -146,7 +164,7 @@ class Rest {
     if (this.debug) {
       console.info(`[REST KIT DEBUG]: request: ${url}, options: ${JSON.stringify(options)}`);
     }
-    return fetch(url, options)
+    return this._fetch()(url, options)
       .then(this._checkStatus)
       .then(response => response.text())
       .then((options.dataTypeParser || this.dataTypeParser).parse)  // default is this.datatypeParser
@@ -156,16 +174,18 @@ class Rest {
 
   async rest(url, options = {}) {
     const { data, err } = await this._request(url, {
+      ...this.fetchOptions,
       ...options,
       headers: {
         'Authorization': await this.authorizationObain(),
+        ...(this.fetchOptions.headers || {}),
         ...options.headers,
       }
     });
 
     if (!err) {
       if (this.debug) {
-        console.info(`[REST KIT DEBUG]: request: ${url} successed, data: `, data);
+        console.info(`[REST KIT DEBUG]: request: ${url} successed, data: ${JSON.stringify(data)}`, );
       }
       return { data };
     }
@@ -173,7 +193,7 @@ class Rest {
 
     const error = await this._parseError(err, options);
     if (this.debug) {
-      console.error(`[REST KIT DEBUG]: request: ${url} failed, err: `, error);
+      console.error(`[REST KIT DEBUG]: request: ${url} failed, err: ${JSON.stringify(error)}`);
     }
     return { err: error };
   }

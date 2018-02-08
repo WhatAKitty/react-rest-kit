@@ -1,8 +1,4 @@
-'use strict';
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
+'use strict';Object.defineProperty(exports, "__esModule", { value: true });
 var isBlank = exports.isBlank = function isBlank(str) {
   if ('undefined' === typeof str || str === null) {
     return true;
