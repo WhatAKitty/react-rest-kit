@@ -58,6 +58,10 @@ class Rest {
     this.UPLOAD = this.UPLOAD.bind(this);
   }
 
+  get fetch() {
+    return this._fetch();
+  }
+
   _fetch() {
     if (this.debug && this.mockFetch) return this.mockFetch;
     else if ('undefined' !== typeof window) return window.fetch;

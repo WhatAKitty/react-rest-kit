@@ -110,4 +110,38 @@ describe('test rest', () => {
 
   });
 
+  describe('test get fetch attribute', () => {
+    it('test raw fetch', async () => {
+      const rest = new Rest({
+        contentType: 'application/json',
+        dataType: 'json',
+      });
+      expect(rest.fetch).to.be.an('function');
+      expect(rest.fetch === global.fetch).to.be.equal(true);
+    });
+    it('test fetch mock fetch', async () => {
+      const rest = new Rest({
+        debug: true,
+        mockRequire: require('./_mocks_'),
+        mockOptions: {
+          delay: 200, // 200ms
+          fetch: global.fetch,
+          exclude: [
+            'http://(.*)',
+            'https://(.*)',
+          ],
+        },
+        contentType: 'application/json',
+        dataType: 'json',
+        exceptionHandler: ({ status, error }) => {
+          if (status === 401 || status === 403) {
+            throw new Error('no permission');
+          }
+        },
+      });
+      expect(rest.fetch).to.be.an('function');
+      expect(rest.fetch !== global.fetch).to.be.equal(true);
+    });
+  });
+
 });
