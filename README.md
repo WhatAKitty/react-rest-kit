@@ -37,36 +37,45 @@ export default rest;
 
 * Using rest client
 ```js
-import { GET, POST, PUT, DELETE } from './the/path/to/rest/file';
+import rest from './the/path/to/rest/file';
 
 const testGET = async () => {
-  const { data, err } = await GET('url', {
+  const { data, err } = await rest.GET('url', {
     name: 'whatakitty',
   });
 };
 // => GET `url?name=whatakitty`
 
 const testPOST = async () => {
-  const { data, err } = await POST('url', {
+  const { data, err } = await rest.POST('url', {
     name: 'whatakitty',
-    sex: 'body',
+    sex: 'boy',
   });
 };
-// => POST `url` with parameter { name: 'wahtakitty', sex: 'body' }
+// => POST `url` with parameter { name: 'wahtakitty', sex: 'boy' }
 
 const testPUT = async () => {
-  const { data, err } = await POST('url', {
+  const { data, err } = await rest.POST('url', {
     id: '123abc',
     name: 'whatakittyNew',
   });
 };
-// => PUT `url` with parameter { id: '123abc', name: 'whatakitty' }
+// => PUT `url` with parameter { id: '123abc', name: 'whatakittyNew' }
 
 const testDELETE = async () => {
-  const { data, err } = await DELETE('url/123abc');
+  const { data, err } = await rest.DELETE('url/123abc');
 };
 // => DELETE `url/123abc`
+
+const testPATCH = async () => {
+  const { data, err } = await rest.PATCH('url/123abc', {
+    name: 'whatakittyNew',
+  });
+};
+// => PATCH `url/123abc` with parameter { name: 'whatakittyNew }
 ```
+
+
 
 # Roadmap
 - [x] Basic RESTful style

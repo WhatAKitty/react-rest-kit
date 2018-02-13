@@ -14,4 +14,12 @@ export default {
   '/api/403': () => ({
     status: 403,
   }),
+  '/api/500': () => ({
+    status: 500,
+    data: {
+      message: 'wrong',
+      timestamp: new Date().getTime(),
+      error: 'wrong',
+    },
+  }),
 }

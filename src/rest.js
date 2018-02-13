@@ -114,12 +114,6 @@ class Rest {
     const error = new Error(response.statusText);
     error.response = response;
 
-    // global exception handler
-    this.exceptionHandler({
-      status: response.status,
-      error,
-    });
-
     throw error;
   }
 
@@ -199,6 +193,13 @@ class Rest {
     if (this.debug) {
       console.error(`[REST KIT DEBUG]: request: ${url} failed, err: ${JSON.stringify(error)}`);
     }
+
+    // global exception handler
+    this.exceptionHandler({
+      status: error.status,
+      err: error,
+    });
+
     return { err: error };
   }
 

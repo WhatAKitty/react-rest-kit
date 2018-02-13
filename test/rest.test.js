@@ -82,6 +82,8 @@ describe('test rest', () => {
 
   describe('test rest exception handler', () => {
 
+    let exceptionHandlerRet;
+
     const rest = new Rest({
       debug: true,
       mockRequire: require('./_mocks_'),
@@ -95,22 +97,32 @@ describe('test rest', () => {
       },
       contentType: 'application/json',
       dataType: 'json',
-      exceptionHandler: ({ status, error }) => {
+      exceptionHandler: ({ status, err }) => {
         if (status === 401 || status === 403) {
-          throw new Error('no permission');
+          exceptionHandlerRet = 'no permission';
+        } else {
+          exceptionHandlerRet = err.message;
         }
       },
     });
 
     it('test 401 exception', async () => {
-      const { err } = await rest.GET('/api/403');;
+      const { err } = await rest.GET('/api/403');
       expect(err).to.not.be.empty();
-      expect(err.message).to.be.equal('no permission');
+      expect(exceptionHandlerRet).to.be.equal('no permission');
+    });
+
+    it('test 500 exception', async () => {
+      const { err } = await rest.GET('/api/500');
+      expect(err).to.not.be.empty();
+      expect(err.message).to.be.equal('wrong');
+      expect(exceptionHandlerRet).to.be.equal(err.message);
     });
 
   });
 
   describe('test get fetch attribute', () => {
+
     it('test raw fetch', async () => {
       const rest = new Rest({
         contentType: 'application/json',
@@ -142,6 +154,7 @@ describe('test rest', () => {
       expect(rest.fetch).to.be.an('function');
       expect(rest.fetch !== global.fetch).to.be.equal(true);
     });
+
   });
 
 });
