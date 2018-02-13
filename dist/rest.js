@@ -114,12 +114,6 @@ Rest = function () {
       var error = new Error(response.statusText);
       error.response = response;
 
-      // global exception handler
-      this.exceptionHandler({
-        status: response.status,
-        error: error });
-
-
       throw error;
     } }, { key: '_parseError', value: function _parseError(
 
@@ -198,8 +192,15 @@ Rest = function () {
                   this._parseError(err, options));case 26:error = _context2.sent;
                 if (this.debug) {
                   console.error('[REST KIT DEBUG]: request: ' + url + ' failed, err: ' + JSON.stringify(error));
-                }return _context2.abrupt('return',
-                { err: error });case 29:case 'end':return _context2.stop();}}}, _callee2, this);}));function rest(_x3) {return _ref3.apply(this, arguments);}return rest;}() }, { key: 'GET', value: function () {var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(
+                }
+
+                // global exception handler
+                this.exceptionHandler({
+                  status: error.status,
+                  err: error });return _context2.abrupt('return',
+
+
+                { err: error });case 30:case 'end':return _context2.stop();}}}, _callee2, this);}));function rest(_x3) {return _ref3.apply(this, arguments);}return rest;}() }, { key: 'GET', value: function () {var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(
 
 
       url, params) {var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};return regeneratorRuntime.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
