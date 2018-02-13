@@ -23,11 +23,13 @@ const rest = new Rest({
   },
   contentType: 'application/json',  // the body content type
   dataType: 'json',   // the accept data type
-  exceptionHandler: ({ status, error }) => {    // global exceptionHandler
+  exceptionHandler: ({ status, err }) => {    // global exceptionHandler
     if (status === 401 || status === 403) {
-      const err = new Error('no permission');
-      err.response = error.response;
-      throw err;
+      dispatch({
+        type: 'logout',
+      });
+    } else {
+      notification.error(err.message);
     }
   },
 });
