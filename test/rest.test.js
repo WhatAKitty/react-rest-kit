@@ -22,6 +22,21 @@ describe('test rest', () => {
     expect(res.data).to.ok();
     expect(res.err).to.be.eql(undefined);
   });
+  it('test GET with no encode', async () => {
+    const rest = new Rest({
+      contentType: 'application/json',
+      dataType: 'text',
+    });
+    const res = await rest.GET('http://www.baidu.com', {
+      a: '中文',
+    }, {
+        qsStringifyOptions: {
+          encodeURIComponent: uri => uri,
+        },
+      });
+    expect(res.data).to.ok();
+    expect(res.err).to.be.eql(undefined);
+  });
   it('test POST method', async () => {
     const rest = new Rest({
       contentType: 'application/json',

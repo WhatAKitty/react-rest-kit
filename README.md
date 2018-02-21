@@ -44,6 +44,10 @@ import rest from './the/path/to/rest/file';
 const testGET = async () => {
   const { data, err } = await rest.GET('url', {
     name: 'whatakitty',
+  }, {
+    qsStringifyOptions: {
+      encodeURIComponent: uri => uri,     // with no encode
+    },
   });
 };
 // => GET `url?name=whatakitty`

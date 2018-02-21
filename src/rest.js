@@ -203,14 +203,18 @@ class Rest {
   }
 
   async GET(url, params, options = {}) {
-    return await this.rest(`${url}${params ? `?${querystring.stringify(params)}` : ''}`, {
-      ...options,
-      method: 'GET',
-      headers: {
-        'Content-Type': this._contentType(),
-        ...options.headers
-      }
-    });
+    const qsStringifyOptions = options.qsStringifyOptions || {};
+    const { sep, eq, encodeURIComponent } = qsStringifyOptions;
+    return await this.rest(`${url}${params ? `?${querystring.stringify(params, sep, eq, {
+      encodeURIComponent,
+    })}` : ''}`, {
+        ...options,
+        method: 'GET',
+        headers: {
+          'Content-Type': this._contentType(),
+          ...options.headers
+        }
+      });
   }
 
   async POST(url, data, options = {}) {
