@@ -64,8 +64,7 @@ Rest = function () {
 
     {
       if (this.debug && this.mockFetch) return this.mockFetch;else
-      if ('undefined' !== typeof window) return window.fetch;else
-      if ('undefined' !== typeof global) return global.fetch;
+      return fetch;
     } }, { key: '_contentType', value: function _contentType()
 
     {
@@ -203,13 +202,17 @@ Rest = function () {
                 { err: error });case 30:case 'end':return _context2.stop();}}}, _callee2, this);}));function rest(_x3) {return _ref3.apply(this, arguments);}return rest;}() }, { key: 'GET', value: function () {var _ref5 = _asyncToGenerator(regeneratorRuntime.mark(function _callee3(
 
 
-      url, params) {var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};return regeneratorRuntime.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:_context3.next = 2;return (
-                  this.rest('' + url + (params ? '?' + _querystring2.default.stringify(params) : ''), _extends({},
+      url, params) {var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};var qsStringifyOptions, sep, eq, encodeURIComponent;return regeneratorRuntime.wrap(function _callee3$(_context3) {while (1) {switch (_context3.prev = _context3.next) {case 0:
+                qsStringifyOptions = options.qsStringifyOptions || {};
+                sep = qsStringifyOptions.sep, eq = qsStringifyOptions.eq, encodeURIComponent = qsStringifyOptions.encodeURIComponent;_context3.next = 4;return (
+                  this.rest('' + url + (params ? '?' + _querystring2.default.stringify(params, sep, eq, {
+                    encodeURIComponent: encodeURIComponent }) :
+                  ''), _extends({},
                   options, {
                     method: 'GET',
                     headers: _extends({
                       'Content-Type': this._contentType() },
-                    options.headers) })));case 2:return _context3.abrupt('return', _context3.sent);case 3:case 'end':return _context3.stop();}}}, _callee3, this);}));function GET(_x5, _x6) {return _ref5.apply(this, arguments);}return GET;}() }, { key: 'POST', value: function () {var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(
+                    options.headers) })));case 4:return _context3.abrupt('return', _context3.sent);case 5:case 'end':return _context3.stop();}}}, _callee3, this);}));function GET(_x5, _x6) {return _ref5.apply(this, arguments);}return GET;}() }, { key: 'POST', value: function () {var _ref6 = _asyncToGenerator(regeneratorRuntime.mark(function _callee4(
 
 
 
