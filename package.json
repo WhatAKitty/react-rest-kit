@@ -1,6 +1,6 @@
 {
   "name": "react-rest-kit",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "wrap fetch to restful style",
   "main": "dist/index.js",
   "scripts": {

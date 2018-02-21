@@ -64,8 +64,7 @@ class Rest {
 
   _fetch() {
     if (this.debug && this.mockFetch) return this.mockFetch;
-    else if ('undefined' !== typeof window) return window.fetch;
-    else if ('undefined' !== typeof global) return global.fetch;
+    else return fetch;
   }
 
   _contentType() {
